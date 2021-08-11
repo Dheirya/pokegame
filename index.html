@@ -572,7 +572,7 @@ function buildVars(_callback) {
    characters = "nyll";
    const fetchPokemon = (_callback) => {
       const promises = [];
-      for(let i = 1; i <= 50; i++) {
+      for(let i = 1; i <= 898; i++) {
          const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
          promises.push(fetch(url, { cache: "force-cache" }).then((res) => res.json()));
       }
