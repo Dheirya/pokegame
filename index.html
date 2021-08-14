@@ -65,6 +65,13 @@ body {
 	 background-repeat: no-repeat;
 	 background-size: 500% 400%;
 }
+.id {
+	position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 99;
+    font-size: 1.3rem;
+}
  .type.electric {
 	 background-position: 100% 0;
 }
@@ -262,6 +269,7 @@ h1 {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     grid-gap: 20px;
     padding-inline-start: 0;
+    cursor: pointer;
 }
 .card {
     position: relative;
@@ -389,13 +397,22 @@ h1 {
 .inbus {
   text-align: center;
   padding: 15px;
-  margin-top:15px;
   font-size: 17px;
   border: none;
   width: 93%;
   background: white;
 }
 .inbus:hover {
+  background: #f1f1f1;
+}
+.inbuse {
+  padding: 8px;
+  font-size: 17px;
+  border: none;
+  width: 50px;
+  background: white;
+}
+.inbuse:hover {
   background: #f1f1f1;
 }
 .buttons {
@@ -413,6 +430,19 @@ h1 {
   margin: 4px 2px;
   cursor: pointer;
 }
+.buton {
+  background-color: #e7e7e7;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  margin-left: 10px;
+  cursor: pointer;
+}
 .buttons button:hover {
   background-color:#8c8888 !important;
 }
@@ -427,23 +457,28 @@ h1 {
     <a href="https://pkgame.netlify.app/"><img loading="lazy" class="logo" title="Reset Game" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/2000px-International_Pok%C3%A9mon_logo.svg.png" alt="Pokemon"></a>
 </header>
 <main>
-  <div class="instructions" style="margin-top:-35px">
-    <p style="display: inline-block;">Choose Your Pokemon</p>&nbsp;&nbsp;&nbsp;<span style="font-size: 2em;display: inline-block">(<span class="power">Medium</span> Mode)</span>
+  <div class="instructions" style="margin-top:-35px;margin-bottom:-15px">
+    <p style="display: inline-block;">Choose Your Pokemon</p>&nbsp;&nbsp;&nbsp;<span style="font-size: 2em;display: inline-block">(<span class="power">Medium</span> Mode ~ <span class="count" onclick="coocyo()" style="cursor:pointer">150</span> Pokemon)</span>
   </div>
   <center>
     <div class="loadingio-spinner-bean-eater-cqc1ay6ytcq"><div class="ldio-z7s1nkjr2hg">
 <div><div></div><div></div><div></div></div><div><div></div><div></div><div></div></div>
 </div></div>
+    <br/>
+    <h3 class="loadingio-spinner-bean-eater-cqc1ay6ytcq">
+      Loading...
+    </h3>
   </center>
   <div class="container" style="display:none;margin-top:-50px">
     <div class="overlay-content">
-      <center>
-        <div class="buttons">
+      <center style="margin-bottom:5px">
+        <div class="buttons" style="margin-bottom:5px">
           <button class="e" onclick="changevar('easy', true, 'e')">Easy (x0.9 Attack Power)</button>
-          <button class="m dark" onclick="changevar('medium', true, 'm')">Medium (x1.5 Attack Power)</button>
-          <button class="h" onclick="changevar('hard', true, 'h')">Hard (x2.5 Attack Power)</button>
-          <button class="c" onclick="changevar('crazy', true, 'c')">Crazy (x4 Attack Power)</button>
+          <button class="m dark" onclick="changevar('medium', true, 'm')">Medium (x2 Attack Power)</button>
+          <button class="h" onclick="changevar('hard', true, 'h')">Hard (x3.5 Attack Power)</button>
+          <button class="c" onclick="changevar('crazy', true, 'c')">Crazy (x5 Attack Power)</button><br/>
         </div>
+        <span style="font-size:2rem">Load</span>&nbsp;&nbsp;&nbsp;<input class="inbuse" type="number" id="load" name="load" min="2" max="898" value="150">&nbsp;&nbsp;&nbsp;<span style="font-size:2rem">Pokemon</span><a class="buton" href="#">Load It!</a>
       </center>
       <center>
         <form class="form-search">
@@ -474,6 +509,63 @@ h1 {
 <script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+function coocyo(){
+  document.getElementById("load").focus();
+}
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-right',
+  iconColor: 'white',
+  customClass: {
+    popup: 'colored-toast'
+  },
+  showConfirmButton: false,
+  timer: 1500,
+  timerProgressBar: false
+});
+function percent(num){
+  var d = Math.random();
+  if (d < num){
+    return true;
+  }else{
+    return false;
+  }
+}
+val = percent(0.3);
+if(val==true){
+  console.log("True: "+ val);
+}else{
+  console.log("False: "+ val);
+}
+$(".buton").hide();
+$(".inbuse").on('input', function() {
+  vale = $(".inbuse").val();
+  regex=/^[a-zA-Z]+$/;
+  if(isNaN(vale)){
+    $(".buton").hide();
+    Toast.fire({
+      icon: 'error',
+      title: 'Cannot load NaN of Pokemon'
+    });
+  }
+  if($(".inbuse").val() < 2){
+    $(".buton").hide();
+    Toast.fire({
+      icon: 'error',
+      title: 'Cannot load less than 2 Pokemon'
+    });
+  }else if($(".inbuse").val() < 899){
+    $(".buton").show();
+    url = window.location.href.split('?')[0] + "?load=" + vale;
+    $(".buton").attr("href", url);
+  }else{
+    $(".buton").hide();
+    Toast.fire({
+      icon: 'error',
+      title: 'Cannot load more than 898 Pokemon'
+    });
+  }
+});
 level = "medium";
 function updateResults() {
     var query = $.trim($('.search-query').val()).toLowerCase();
@@ -531,17 +623,6 @@ changevar("medium", false, "m");
 $('.form-search').on('submit',function(){return false;});
 $('.form-search .btn').on('click', updateResults);
 $('.search-query').on('input', updateResults);
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-right',
-  iconColor: 'white',
-  customClass: {
-    popup: 'colored-toast'
-  },
-  showConfirmButton: false,
-  timer: 1500,
-  timerProgressBar: false
-});
 var music = {},
    typeSprite = "",
    types = [],
@@ -549,14 +630,9 @@ var music = {},
 (attackName = ""), (curAttack = {}), (randInt = 0), (enemyAttack = {}), (characters = []), (defendProgressInt = null), (defendProgressComplete = 0), (progressInt = null), (progressComplete = 0);
 function buildVars(_callback) {
    music = {
-      opening: "https://vgmsite.com/soundtracks/pokemon-original-game-soundtrack/wpujuzto/103%20-%20professor%20oak.mp3",
-      battle: "https://vgmsite.com/soundtracks/pokemon-original-game-soundtrack/mckmelhq/115%20-%20battle%20%28vs%20trainer%29.mp3",
-      victory: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/gjqttmbp/108-victory%20%28vs%20wild%20pokemon%29.mp3",
-      pikachu: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/yqmyjddn/170-pikachu.mp3",
-      charmander: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/qyhrrtij/149-charmander.mp3",
-      squirtle: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/rvueiyxc/152-squirtle.mp3",
-      bulbasaur: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/csmyktdq/146-bulbasaur.mp3",
-      machop: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/bmepcinv/213-machop.mp3",
+      opening: "https://vgmsite.com/soundtracks/pokemon-gameboy-sound-collection/ftcsbcug/103-professor%20oak.mp3",
+      battle: "https://vgmsite.com/soundtracks/pokemon-sword-shield-ost/hmvtjhqwde/10%20-%20Battle%21%20%28Wild%20Pokémon%29.mp3",
+      victory: "https://vgmsite.com/soundtracks/pokemon-sword-shield-ost/sbshdutavy/12%20-%20Level%20Up%21.mp3"
    };
    typeSprite = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b3c54c95-8c44-4e5b-93ae-389fe559bcbf/d3agp02-2859ed66-7bdb-4a62-9adf-a53765d36996.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTpmaWxlLmRvd25sb2FkIl0sIm9iaiI6W1t7InBhdGgiOiIvZi9iM2M1NGM5NS04YzQ0LTRlNWItOTNhZS0zODlmZTU1OWJjYmYvZDNhZ3AwMi0yODU5ZWQ2Ni03YmRiLTRhNjItOWFkZi1hNTM3NjVkMzY5OTYucG5nIn1dXX0.eKwCMj324a8jQcdJeU6bHI00pkoU3gECOlu_hR7qED4";
    types = ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychic", "rock", "steel", "water"];
@@ -572,9 +648,20 @@ function buildVars(_callback) {
    characters = "nyll";
    const fetchPokemon = (_callback) => {
       const promises = [];
-      for(let i = 1; i <= 898; i++) {
-         const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
-         promises.push(fetch(url, { cache: "force-cache" }).then((res) => res.json()));
+      const urlParams = new URLSearchParams(window.location.search);
+      load = urlParams.get('load');
+      if(load){
+        $(".inbuse").attr("value", load);
+        $(".count").html(load);
+        for(let i = 1; i <= load; i++) {
+           const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+           promises.push(fetch(url, { cache: "force-cache" }).then((res) => res.json()));
+        }
+      }else{
+        for(let i = 1; i <= 150; i++) {
+           const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+           promises.push(fetch(url, { cache: "force-cache" }).then((res) => res.json()));
+        }
       }
       Promise.all(promises).then((results) => {
          const pokemon = results.map((result) => ({
@@ -587,9 +674,36 @@ function buildVars(_callback) {
             hp: { current: 2000, total: 2000 },
             attacks: [{ name: "low kick", hp: randomNum(40, 20), avail: { total: 30, remaining: 30 } }, { name: "karate chop", hp: randomNum(60, 45), avail: { total: 10, remaining: 10 } }, { name: "seismic toss", hp: randomNum(75, 60), avail: { total: 5, remaining: 5 } }, { name: "hundred furious punches", hp: randomNum(160, 130), avail: { total: 2, remaining: 2 } }, ],
             id: result.id,
-            hide: false
+            hide: false,
+            exp: result.base_experience,
+            power: 0
          }));
          for(let p of pokemon) {
+            if(p.exp < 75){
+              p.power = 1;
+              p.hp = {
+                current: 1750,
+                total: 1750,
+              };
+            }else if(p.exp > 74){
+              p.power = 1.1;
+              p.hp = {
+                current: 2250,
+                total: 2250,
+              };
+            }else if(p.exp > 115){
+              p.power = 1.2;
+              p.hp = {
+                current: 2500,
+                total: 2500,
+              };
+            }else if(p.exp > 200){
+              p.power = 1.3;
+              p.hp = {
+                current: 3000,
+                total: 3000,
+              };
+            }
             if(p.type.includes(",")){
               ci = p.type;
               ch = ci.substr(0, ci.indexOf(','));
@@ -814,13 +928,14 @@ function populateChar(container, character) {
    if(character === "hero") {
       facing = "back";
    }
-   container.append('<section class="char"><img loading="lazy" src="' + gameData[character].img[facing] + '" alt="' + gameData[character].name + '" width="200" height="200"><aside class="data"><h2>' + gameData[character].name + '</h2><div><h5 style="margin-top:-15px;margin-bottom:-5px" id="attack' + gameData[character].name +'">Last Attack: None</h5><p><span id="hero-attacks">' + gameData[character].hp.current + "</span>/" + gameData[character].hp.total + "</p></div></aside></section>");
+   container.append('<section class="char"><img loading="lazy" src="' + gameData[character].img[facing] + '" alt="' + gameData[character].name + '" width="200" height="200"><aside class="data"><h2>' + gameData[character].name + '</h2><div><h5 style="margin-top:-15px;margin-bottom:-5px" id="attack' + gameData[character].name +'">Last Attack: None</h5><p><span id="' + character + '-attacks">' + gameData[character].hp.current + "</span>/" + gameData[character].hp.total + "</p></div></aside></section>");
 }
 function attackMultiplier(attacker, curAttack) {
    var defender = "enemy";
    if(attacker === "enemy") {
       defender = "hero";
    }
+   curAttack.hp *= gameData[attacker].power;
    attackserer = camelize(gameData[attacker].name + ' uses ' + curAttack.name + '!');
    geyt = "#attack" + gameData[attacker].name;
    coret = "Last Attack: " + attackserer;
@@ -829,29 +944,43 @@ function attackMultiplier(attacker, curAttack) {
     if(level=="easy"){
       curAttack.hp *= 0.9;
     }else if(level=="medium"){
-      curAttack.hp *= 1.5;
+      curAttack.hp *= 2;
     }else if(level=="hard"){
-      curAttack.hp *= 2.5;
+      curAttack.hp *= 3.5;
     }else if(level=="crazy"){
-      curAttack.hp *= 4;
+      curAttack.hp *= 5;
     }
    }
    if(gameData[defender].weakness.includes(gameData[attacker].type) >= 0) {
       curAttack.hp *= 2;
-      if(attacker != "enemy"){
-        Toast.fire({
-          icon: 'info',
-          title: 'Strong Attack! (Type Advantage)'
-        });
+      if(curAttack.hp < 400){
+        if(attacker != "enemy"){
+          Toast.fire({
+            icon: 'info',
+            title: 'Strong Attack! (Type Advantage)'
+          });
+        }
+      }else{
+          Toast.fire({
+            icon: 'info',
+            title: 'Critical Attack!'
+          });
       }
    }
    if(gameData[defender].resistance.indexOf(gameData[attacker].type) >= 0) {
       curAttack.hp /= 2;
-      if(attacker != "enemy"){
-        Toast.fire({
-          icon: 'info',
-          title: 'Weak Attack! (Type Disadvantage)'
-        });
+      if(curAttack.hp < 400){
+        if(attacker != "enemy"){
+          Toast.fire({
+            icon: 'info',
+            title: 'Weak Attack! (Type Disadvantage)'
+          });
+        }
+      }else{
+          Toast.fire({
+            icon: 'info',
+            title: 'Critical Attack!'
+          });
       }
    }
    curAttack.hp = Math.floor(curAttack.hp);
@@ -893,7 +1022,7 @@ function resetGame() {
            ch = characters[i].type;
          }
          if(characters[i].hide == false){
-            $(".characters").append('<li class="card char-container"><img class="lazyload blur-up card-image" loading="lazy" data-src="' + characters[i].img["default"] + '" alt="' + characters[i].name + '"><h2 class="card-title">' + characters[i].name + '</h2><p>' + characters[i].type + '</p><span class="type ' + ch + '"></span></li>');
+            $(".characters").append('<li class="card char-container"><img class="lazyload blur-up card-image" loading="lazy" data-src="' + characters[i].img["default"] + '" alt="' + characters[i].name + '"><h2 class="card-title">' + characters[i].name + '</h2><p>' + characters[i].type + '</p><span class="id">' + characters[i].id + '</span><span class="type ' + ch + '"></span></li>');
          }
       }
       characterChoice();
@@ -942,14 +1071,15 @@ function characterChoice() {
             });
             $(".container").hide();
             gameData.step = 3;
-            gameData.hero.hp.current = 2000;
-            gameData.hero.hp.total = 2000;
-            $(".stadium .hero").val("2000");
-            $("#hero-attacks").text("2000");
+            ttl = gameData.hero.hp.total;
+            gameData.hero.hp.current = ttl;
+            gameData.hero.hp.total = ttl;
+            $("#hero-attacks").text(ttl);
+            ttle = gameData.enemy.hp.total;
+            gameData.enemy.hp.current = ttle;
+            gameData.enemy.hp.total = ttle;
+            $("#enemy-attacks").text(ttle);
             attackList();
-            gameData.hero.hp.current = 2000;
-            gameData.hero.hp.total = 2000;
-            $("#hero-attacks").text("2000");
             break;
       }
    });
